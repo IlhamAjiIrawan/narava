@@ -1087,6 +1087,7 @@
             });
 
             if(socialChartInstance) socialChartInstance.destroy();
+            if(socialChartInstance) socialChartInstance.destroy();
             socialChartInstance = new Chart(ctx,{
                 type:'line',
                 data:{labels:fl, datasets},
@@ -1097,7 +1098,38 @@
                         y:{min:0, grid:{color:'rgba(0,0,0,.04)'}, ticks:{font:{family:"'Inter',sans-serif",size:11},color:'#94a3b8'}},
                         x:{grid:{display:false}, ticks:{font:{family:"'Inter',sans-serif",size:11},color:'#94a3b8'}}
                     },
-                    plugins:{legend:{position:'top',labels:{font:{family:"'Inter',sans-serif",size:12},boxWidth:12,borderRadius:6}}}
+                    plugins:{
+                        legend:{position:'top',labels:{font:{family:"'Inter',sans-serif",size:12},boxWidth:12,borderRadius:6}},
+                        tooltip:{
+                            backgroundColor:'rgba(15,23,42,0.92)',
+                            titleColor:'#94a3b8',
+                            titleFont:{family:"'Inter',sans-serif",size:11},
+                            bodyColor:'#f1f5f9',
+                            bodyFont:{family:"'Inter',sans-serif",size:12.5},
+                            padding:12,
+                            cornerRadius:10,
+                            borderColor:'rgba(255,255,255,0.08)',
+                            borderWidth:1,
+                            callbacks:{
+                                label: function(ctx) {
+                                    const ds = ctx.dataset;
+                                    const i  = ctx.dataIndex;
+                                    const val = ctx.parsed.y;
+                                    const prev = i > 0 ? ds.data[i - 1] : null;
+                                    let line = ` ${ds.label}: ${val !== null ? val.toLocaleString('id-ID') : '—'}`;
+                                    if (prev !== null && prev !== undefined && prev !== 0 && val !== null) {
+                                        const pct = ((val - prev) / prev * 100).toFixed(1);
+                                        const arrow = pct > 0 ? '↑' : pct < 0 ? '↓' : '→';
+                                        const sign  = pct > 0 ? '+' : '';
+                                        line += `  ${arrow} ${sign}${pct}%`;
+                                    } else if (prev === 0 && val > 0) {
+                                        line += '  ↑ baru';
+                                    }
+                                    return line;
+                                }
+                            }
+                        }
+                    }
                 }
             });
         }
