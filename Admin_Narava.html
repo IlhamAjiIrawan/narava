@@ -1,0 +1,1103 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Narava Creative — Admin</title>
+    
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <style>
+        :root {
+            --brand:     #14b8a6;
+            --brand-dk:  #0d9488;
+            --orange:    #f97316;
+            --ink:       #0f172a;
+            --surface:   #0f172a;
+            --panel:     #1e293b;
+            --panel-2:   #263548;
+            --muted:     #94a3b8;
+            --border:    rgba(255,255,255,0.07);
+        }
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        body {
+            background: #f1f5f9;
+            font-family: 'Inter', sans-serif;
+            color: var(--ink);
+            display: flex;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 5px; height: 5px; }
+        ::-webkit-scrollbar-track { background: transparent; }
+        ::-webkit-scrollbar-thumb { background: #334155; border-radius: 99px; }
+        ::-webkit-scrollbar-thumb:hover { background: var(--brand); }
+
+        /* SIDEBAR */
+        #sidebar {
+            width: 255px;
+            background: var(--surface);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            flex-shrink: 0;
+            position: fixed;
+            left: 0; top: 0;
+            z-index: 30;
+        }
+
+        .sidebar-logo {
+            padding: 22px 18px 18px;
+            border-bottom: 1px solid var(--border);
+            display: flex;
+            align-items: center;
+            gap: 11px;
+        }
+        .logo-mark {
+            width: 37px; height: 37px;
+            background: linear-gradient(135deg, var(--brand), #0891b2);
+            border-radius: 10px;
+            display: flex; align-items: center; justify-content: center;
+            font-family: 'Space Grotesk', sans-serif;
+            font-weight: 700; color: white; font-size: 17px;
+            flex-shrink: 0;
+        }
+        .logo-text {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 18px; font-weight: 700; color: white;
+        }
+        .logo-text span { color: var(--orange); }
+
+        .sidebar-nav {
+            flex: 1;
+            padding: 14px 10px;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+            overflow-y: auto;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 600;
+            letter-spacing: 0.08em;
+            color: #475569;
+            text-transform: uppercase;
+            padding: 10px 10px 5px;
+        }
+
+        .nav-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px 12px;
+            border-radius: 8px;
+            color: #94a3b8;
+            font-size: 13.5px;
+            font-weight: 500;
+            cursor: pointer;
+            border: none;
+            background: transparent;
+            width: 100%;
+            text-align: left;
+            transition: all 0.15s ease;
+            border-left: 3px solid transparent;
+        }
+        .nav-item:hover { background: var(--panel-2); color: white; }
+        .nav-item.active {
+            background: rgba(20,184,166,0.12);
+            color: var(--brand);
+            border-left-color: var(--brand);
+            font-weight: 600;
+        }
+        .nav-item i { font-size: 18px; flex-shrink: 0; }
+
+        .sidebar-footer {
+            padding: 14px;
+            border-top: 1px solid var(--border);
+        }
+        .user-chip {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 10px;
+            border-radius: 10px;
+            background: var(--panel);
+        }
+        .user-chip img { width: 34px; height: 34px; border-radius: 8px; flex-shrink: 0; }
+        .user-chip-info p { color: white; font-size: 13px; font-weight: 600; }
+        .user-chip-info small { color: #64748b; font-size: 11px; }
+        .reset-btn {
+            background: none; border: none;
+            width: 30px; height: 30px;
+            border-radius: 7px;
+            display: flex; align-items: center; justify-content: center;
+            color: #475569; cursor: pointer;
+            transition: all 0.15s;
+            flex-shrink: 0;
+        }
+        .reset-btn:hover { background: #334155; color: #f87171; }
+
+        /* MAIN */
+        #main-content {
+            margin-left: 255px;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            height: 100vh;
+            overflow: hidden;
+        }
+
+        /* HEADER */
+        #top-header {
+            height: 62px;
+            background: white;
+            border-bottom: 1px solid #e2e8f0;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 30px;
+            flex-shrink: 0;
+        }
+        .header-title { font-family: 'Space Grotesk', sans-serif; font-size: 16px; font-weight: 600; color: var(--ink); }
+        .header-date { font-size: 12px; color: #64748b; }
+
+        .header-actions { display: flex; align-items: center; gap: 10px; }
+        .icon-btn {
+            width: 35px; height: 35px;
+            border-radius: 8px;
+            border: 1px solid #e2e8f0;
+            background: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer;
+            color: #64748b;
+            transition: all 0.15s;
+            position: relative;
+            font-size: 17px;
+        }
+        .icon-btn:hover { border-color: var(--brand); color: var(--brand); }
+        .notif-dot {
+            position: absolute;
+            top: 7px; right: 7px;
+            width: 7px; height: 7px;
+            background: var(--orange);
+            border-radius: 50%;
+            border: 1.5px solid white;
+        }
+        .avatar-btn { width: 35px; height: 35px; border-radius: 9px; border: 2px solid #e2e8f0; cursor: pointer; }
+
+        /* PAGE */
+        #page-content {
+            flex: 1;
+            overflow-y: auto;
+            padding: 26px 30px 60px;
+        }
+
+        .section-hidden { display: none !important; }
+
+        .page-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 21px; font-weight: 700; color: var(--ink);
+            margin-bottom: 3px;
+        }
+        .page-sub { font-size: 13px; color: #64748b; margin-bottom: 22px; }
+
+        /* STAT GRID */
+        .stat-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 16px;
+            margin-bottom: 22px;
+        }
+        .stat-card {
+            background: white;
+            border-radius: 13px;
+            padding: 20px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            transition: transform 0.2s, box-shadow 0.2s;
+        }
+        .stat-card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.07); }
+        .stat-icon {
+            width: 38px; height: 38px;
+            border-radius: 9px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 19px;
+            margin-bottom: 12px;
+        }
+        .stat-lbl { font-size: 11.5px; color: #64748b; font-weight: 500; margin-bottom: 3px; }
+        .stat-val {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 25px; font-weight: 700; color: var(--ink);
+            line-height: 1;
+        }
+        .stat-sub { font-size: 11px; color: #94a3b8; margin-top: 5px; }
+        .accent-green { border-top: 3px solid #10b981; }
+        .accent-red   { border-top: 3px solid #ef4444; }
+
+        /* CARD */
+        .card {
+            background: white;
+            border-radius: 13px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.04);
+            overflow: hidden;
+        }
+        .card-header {
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 18px 22px;
+            border-bottom: 1px solid #f8fafc;
+        }
+        .card-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14.5px; font-weight: 600; color: var(--ink);
+        }
+        .card-body { padding: 4px 22px 22px; }
+
+        /* TABLE */
+        table.dt { width: 100%; border-collapse: collapse; font-size: 13px; }
+        table.dt thead tr { border-bottom: 1px solid #f1f5f9; }
+        table.dt thead th {
+            padding: 13px 12px; text-align: left;
+            font-size: 10.5px; font-weight: 600;
+            letter-spacing: 0.06em; text-transform: uppercase; color: #94a3b8;
+        }
+        table.dt tbody tr { border-bottom: 1px solid #f8fafc; transition: background .1s; }
+        table.dt tbody tr:last-child { border: none; }
+        table.dt tbody tr:hover { background: #f8fafc; }
+        table.dt td { padding: 13px 12px; color: #475569; }
+        table.dt td.bold { color: var(--ink); font-weight: 600; }
+
+        /* BADGE */
+        .badge {
+            display: inline-flex; align-items: center; gap: 4px;
+            padding: 3px 9px; border-radius: 99px;
+            font-size: 11px; font-weight: 600;
+        }
+        .b-blue   { background: #eff6ff; color: #3b82f6; }
+        .b-green  { background: #f0fdf4; color: #16a34a; }
+        .b-orange { background: #fff7ed; color: #ea580c; }
+        .b-gray   { background: #f8fafc; color: #64748b; }
+
+        /* PLATFORM TABS */
+        .ptabs { display: flex; gap: 4px; background: #f1f5f9; padding: 4px; border-radius: 10px; }
+        .ptab {
+            display: flex; align-items: center; gap: 7px;
+            padding: 8px 15px; border-radius: 7px;
+            font-size: 13px; font-weight: 500; color: #64748b;
+            cursor: pointer; border: none; background: transparent;
+            transition: all .15s;
+        }
+        .ptab:hover { color: var(--ink); }
+        .ptab.a-ig      { background: white; color: #db2777; box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 600; }
+        .ptab.a-tiktok  { background: white; color: var(--ink); box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 600; }
+        .ptab.a-website { background: white; color: #2563eb; box-shadow: 0 1px 3px rgba(0,0,0,.08); font-weight: 600; }
+
+        /* BUTTONS */
+        .btn-p {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 9px 17px; background: var(--brand); color: white;
+            border-radius: 8px; font-size: 13px; font-weight: 600;
+            border: none; cursor: pointer;
+            box-shadow: 0 1px 3px rgba(20,184,166,.3);
+            transition: all .15s;
+        }
+        .btn-p:hover { background: var(--brand-dk); transform: translateY(-1px); box-shadow: 0 4px 12px rgba(20,184,166,.35); }
+
+        .btn-s {
+            display: inline-flex; align-items: center; gap: 7px;
+            padding: 9px 17px; background: white; color: #475569;
+            border-radius: 8px; font-size: 13px; font-weight: 500;
+            border: 1px solid #e2e8f0; cursor: pointer; transition: all .15s;
+        }
+        .btn-s:hover { border-color: #cbd5e1; background: #f8fafc; }
+
+        /* DATE FILTER */
+        .dfilter {
+            display: flex; align-items: center; gap: 8px;
+            background: white; border: 1px solid #e2e8f0;
+            border-radius: 8px; padding: 7px 12px; font-size: 12.5px;
+        }
+        .dfilter input { border: none; outline: none; color: #475569; font-size: 12.5px; cursor: pointer; background: transparent; font-family: 'Inter', sans-serif; }
+        .dfilter .sep { color: #cbd5e1; }
+        .dfilter button { background: none; border: none; color: #94a3b8; cursor: pointer; display: flex; transition: color .15s; }
+        .dfilter button:hover { color: #ef4444; }
+
+        /* CASHFLOW SUMMARY */
+        .cf-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 15px; margin-bottom: 20px; }
+        .cf-card {
+            border-radius: 12px; padding: 18px 20px;
+            display: flex; align-items: center; gap: 14px;
+        }
+        .cf-income  { background: linear-gradient(135deg,#f0fdf4,#dcfce7); border: 1px solid #bbf7d0; }
+        .cf-expense { background: linear-gradient(135deg,#fef2f2,#fee2e2); border: 1px solid #fecaca; }
+        .cf-icon {
+            width: 42px; height: 42px; border-radius: 11px;
+            display: flex; align-items: center; justify-content: center;
+            font-size: 21px; flex-shrink: 0;
+        }
+        .cf-income  .cf-icon { background: #16a34a; color: white; }
+        .cf-expense .cf-icon { background: #dc2626; color: white; }
+        .cf-lbl { font-size: 11.5px; color: #64748b; margin-bottom: 3px; }
+        .cf-income  .cf-amt { color: #16a34a; font-family: 'Space Grotesk',sans-serif; font-size: 21px; font-weight: 700; }
+        .cf-expense .cf-amt { color: #dc2626; font-family: 'Space Grotesk',sans-serif; font-size: 21px; font-weight: 700; }
+
+        /* INSIGHT CARD */
+        .insight {
+            background: linear-gradient(135deg, #0f172a, #1e293b);
+            border-radius: 13px; padding: 22px; color: white; height: 100%;
+        }
+        .insight-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 14.5px; font-weight: 600; margin-bottom: 14px;
+            display: flex; align-items: center; gap: 8px;
+        }
+        .insight-item {
+            display: flex; gap: 10px; align-items: flex-start;
+            padding: 10px 0; border-bottom: 1px solid rgba(255,255,255,.06);
+            font-size: 12.5px; color: #94a3b8; line-height: 1.5;
+        }
+        .insight-item:last-child { border: none; }
+        .insight-item i { flex-shrink: 0; margin-top: 2px; font-size: 15px; }
+
+        /* MINI STAT CARD */
+        .mstat {
+            background: white; border-radius: 13px;
+            border: 1px solid #f1f5f9;
+            box-shadow: 0 1px 3px rgba(0,0,0,.04);
+            padding: 18px 20px;
+        }
+        .mstat-lbl { font-size: 11.5px; color: #64748b; font-weight: 500; margin-bottom: 6px; }
+        .mstat-row { display: flex; align-items: center; justify-content: space-between; }
+        .mstat-val { font-family: 'Space Grotesk',sans-serif; font-size: 24px; font-weight: 700; color: var(--ink); }
+
+        /* TREND */
+        .trend { font-size: 11.5px; font-weight: 700; padding: 3px 8px; border-radius: 6px; }
+        .t-up   { color: #16a34a; background: #f0fdf4; }
+        .t-down { color: #dc2626; background: #fef2f2; }
+        .t-flat { color: #64748b; background: #f8fafc; }
+
+        /* MODAL */
+        .modal-ov {
+            position: fixed; inset: 0;
+            background: rgba(15,23,42,.65);
+            backdrop-filter: blur(4px);
+            z-index: 50;
+            display: none;
+            align-items: center; justify-content: center;
+            padding: 16px;
+        }
+        .modal-ov.open { display: flex; }
+        .modal-box {
+            background: white; border-radius: 16px;
+            max-width: 450px; width: 100%;
+            padding: 26px;
+            box-shadow: 0 24px 60px rgba(0,0,0,.18);
+            animation: min 0.18s ease;
+        }
+        @keyframes min {
+            from { opacity: 0; transform: scale(.96) translateY(8px); }
+            to   { opacity: 1; transform: scale(1) translateY(0); }
+        }
+        .modal-head {
+            display: flex; align-items: center; justify-content: space-between;
+            margin-bottom: 22px;
+        }
+        .modal-head h3 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 16px; font-weight: 700; color: var(--ink);
+        }
+        .modal-close {
+            width: 30px; height: 30px; border-radius: 7px;
+            border: 1px solid #e2e8f0; background: white;
+            display: flex; align-items: center; justify-content: center;
+            cursor: pointer; color: #64748b; font-size: 16px;
+            transition: all .15s;
+        }
+        .modal-close:hover { background: #fef2f2; border-color: #fecaca; color: #dc2626; }
+
+        .fg { margin-bottom: 14px; }
+        .fg label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 5px; }
+        .fc {
+            width: 100%; padding: 9px 11px;
+            border: 1.5px solid #e2e8f0; border-radius: 8px;
+            font-size: 13.5px; color: var(--ink); background: #f8fafc;
+            outline: none; font-family: 'Inter', sans-serif;
+            transition: border-color .15s, box-shadow .15s;
+        }
+        .fc:focus { border-color: var(--brand); background: white; box-shadow: 0 0 0 3px rgba(20,184,166,.1); }
+        .frow { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+        .mfooter {
+            display: flex; justify-content: flex-end; gap: 10px;
+            margin-top: 22px; padding-top: 18px; border-top: 1px solid #f1f5f9;
+        }
+
+        .chart-wrap { position: relative; height: 270px; }
+
+        .toolbar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 18px; }
+        .toolbar-right { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+
+        .an-grid3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 15px; margin-bottom: 18px; }
+        .an-main  { display: grid; grid-template-columns: 1fr 320px; gap: 18px; align-items: start; }
+    </style>
+</head>
+<body>
+
+    <!-- SIDEBAR -->
+    <aside id="sidebar">
+        <div class="sidebar-logo">
+            <div class="logo-mark">N</div>
+            <span class="logo-text">Narava<span>.</span></span>
+        </div>
+        <nav class="sidebar-nav">
+            <div class="nav-label">Menu Utama</div>
+            <button onclick="switchTab('dashboard', this)" class="nav-item active">
+                <i class="ph ph-squares-four"></i> Dashboard Overview
+            </button>
+            <button onclick="switchTab('analytics', this)" class="nav-item">
+                <i class="ph ph-chart-line-up"></i> Social Analytics
+            </button>
+            <button onclick="switchTab('cashflow', this)" class="nav-item">
+                <i class="ph ph-wallet"></i> Manajemen Cashflow
+            </button>
+        </nav>
+        <div class="sidebar-footer">
+            <div class="user-chip">
+                <img src="https://ui-avatars.com/api/?name=Admin+Narava&background=14b8a6&color=fff&size=80" alt="Admin">
+                <div class="user-chip-info" style="flex:1;min-width:0;">
+                    <p>Admin Narava</p>
+                    <small>Superadmin</small>
+                </div>
+                <button onclick="localStorage.clear(); location.reload();" title="Reset Data" class="reset-btn">
+                    <i class="ph ph-trash" style="font-size:15px;"></i>
+                </button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div id="main-content">
+        <header id="top-header">
+            <div>
+                <div class="header-title">Halo, Admin! 👋</div>
+                <div class="header-date" id="current-date">Memuat…</div>
+            </div>
+            <div class="header-actions">
+                <button class="icon-btn"><i class="ph ph-magnifying-glass"></i></button>
+                <button class="icon-btn">
+                    <i class="ph ph-bell"></i>
+                    <span class="notif-dot"></span>
+                </button>
+                <img src="https://ui-avatars.com/api/?name=Admin+Narava&background=14b8a6&color=fff&size=80" alt="Profile" class="avatar-btn">
+            </div>
+        </header>
+
+        <div id="page-content">
+
+            <!-- DASHBOARD -->
+            <section id="dashboard">
+                <p class="page-title">Dashboard Overview</p>
+                <p class="page-sub">Ringkasan performa bisnis Narava Creative secara real-time.</p>
+
+                <div class="stat-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#eff6ff;color:#3b82f6;"><i class="ph ph-envelope-open"></i></div>
+                        <div class="stat-lbl">Inquiries Baru</div>
+                        <div class="stat-val" id="db-new-inquiries">—</div>
+                        <div class="stat-sub">Total klien masuk</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon" style="background:#fdf4ff;color:#a855f7;"><i class="ph ph-camera-plus"></i></div>
+                        <div class="stat-lbl">Portofolio Aktif</div>
+                        <div class="stat-val" id="db-active-portfolio">—</div>
+                        <div class="stat-sub">Deal &amp; in progress</div>
+                    </div>
+                    <div class="stat-card accent-green">
+                        <div class="stat-icon" style="background:#f0fdf4;color:#16a34a;"><i class="ph ph-trend-up"></i></div>
+                        <div class="stat-lbl">Pemasukan Global</div>
+                        <div class="stat-val" id="db-total-income" style="font-size:18px;">Rp 0K</div>
+                        <div class="stat-sub">Semua transaksi income</div>
+                    </div>
+                    <div class="stat-card accent-red">
+                        <div class="stat-icon" style="background:#fef2f2;color:#dc2626;"><i class="ph ph-receipt"></i></div>
+                        <div class="stat-lbl">Pengeluaran Global</div>
+                        <div class="stat-val" id="db-total-expense" style="font-size:18px;">Rp 0K</div>
+                        <div class="stat-sub">Semua transaksi expense</div>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <div class="card-header">
+                        <span class="card-title">Inquiries &amp; Klien Terbaru</span>
+                        <span style="font-size:11.5px;color:#94a3b8;">Update otomatis</span>
+                    </div>
+                    <div style="overflow-x:auto;">
+                        <table class="dt">
+                            <thead><tr>
+                                <th>Nama Klien</th><th>Layanan</th><th>Nominal</th><th>Status</th>
+                            </tr></thead>
+                            <tbody id="db-transactions-tbody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+            <!-- ANALYTICS -->
+            <section id="analytics" class="section-hidden">
+                <p class="page-title">Social Analytics</p>
+                <p class="page-sub">Pantau perkembangan media sosial Narava Creative.</p>
+
+                <div class="toolbar">
+                    <div class="ptabs">
+                        <button id="btn-ig" onclick="updateChartData('ig')" class="ptab">
+                            <i class="ph ph-instagram-logo"></i> Instagram
+                        </button>
+                        <button id="btn-tiktok" onclick="updateChartData('tiktok')" class="ptab">
+                            <i class="ph ph-tiktok-logo"></i> TikTok
+                        </button>
+                        <button id="btn-website" onclick="updateChartData('website')" class="ptab">
+                            <i class="ph ph-globe"></i> Website
+                        </button>
+                    </div>
+                    <div class="toolbar-right">
+                        <div class="dfilter">
+                            <i class="ph ph-calendar" style="color:#94a3b8;font-size:14px;"></i>
+                            <input type="date" id="an-start-date" onchange="applyAnalyticsFilter()">
+                            <span class="sep">—</span>
+                            <input type="date" id="an-end-date" onchange="applyAnalyticsFilter()">
+                            <button onclick="resetAnalyticsFilter()"><i class="ph ph-x" style="font-size:13px;"></i></button>
+                        </div>
+                        <button onclick="openModal('modal-analytics')" class="btn-p">
+                            <i class="ph ph-plus-bold"></i> Tambah Data
+                        </button>
+                    </div>
+                </div>
+
+                <div class="an-grid3">
+                    <div class="mstat">
+                        <div class="mstat-lbl" id="title-views">Total Views</div>
+                        <div class="mstat-row">
+                            <div class="mstat-val" id="stat-views">0</div>
+                            <span id="trend-views" class="trend t-flat">0%</span>
+                        </div>
+                    </div>
+                    <div class="mstat">
+                        <div class="mstat-lbl" id="title-followers">Total Followers</div>
+                        <div class="mstat-row">
+                            <div class="mstat-val" id="stat-followers">0</div>
+                            <span id="trend-followers" class="trend t-flat">0%</span>
+                        </div>
+                    </div>
+                    <div class="mstat" id="card-likes">
+                        <div class="mstat-lbl" id="title-likes">Total Likes</div>
+                        <div class="mstat-row">
+                            <div class="mstat-val" id="stat-likes">0</div>
+                            <span id="trend-likes" class="trend t-flat">0%</span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="an-main">
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Tren Perkembangan Grafik</span>
+                        </div>
+                        <div style="padding:16px 22px 22px;">
+                            <div class="chart-wrap"><canvas id="socialChart"></canvas></div>
+                        </div>
+                    </div>
+                    <div class="insight">
+                        <div class="insight-title">
+                            <i class="ph-fill ph-lightbulb" style="color:#f97316;"></i>
+                            Highlight Insight
+                        </div>
+                        <div class="insight-item">
+                            <i class="ph-fill ph-instagram-logo" style="color:#db2777;"></i>
+                            Pertumbuhan Instagram sangat stabil dengan lonjakan drastis di minggu kedua.
+                        </div>
+                        <div class="insight-item">
+                            <i class="ph-fill ph-tiktok-logo" style="color:white;"></i>
+                            TikTok memulai dari 0 dan berhasil mendapatkan traksi pada 14 Juni.
+                        </div>
+                        <div class="insight-item">
+                            <i class="ph-fill ph-globe" style="color:#60a5fa;"></i>
+                            Website baru mendapatkan 21 pageviews dan belum ada subscribers.
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- CASHFLOW -->
+            <section id="cashflow" class="section-hidden">
+                <div id="pdf-container">
+                    <div class="toolbar" id="cashflow-actions" style="margin-bottom:22px;">
+                        <div>
+                            <p class="page-title">Manajemen Kas</p>
+                            <p class="page-sub" style="margin-bottom:0;">Pantau arus masuk dan keluar keuangan bisnis.</p>
+                        </div>
+                        <div class="toolbar-right">
+                            <div class="dfilter">
+                                <i class="ph ph-calendar" style="color:#94a3b8;font-size:14px;"></i>
+                                <input type="date" id="cf-start-date" onchange="applyCashflowFilter()">
+                                <span class="sep">—</span>
+                                <input type="date" id="cf-end-date" onchange="applyCashflowFilter()">
+                                <button onclick="resetCashflowFilter()"><i class="ph ph-x" style="font-size:13px;"></i></button>
+                            </div>
+                            <button onclick="openModal('modal-cashflow')" class="btn-p">
+                                <i class="ph ph-plus-bold"></i> Tambah Transaksi
+                            </button>
+                        </div>
+                    </div>
+
+                    <div class="cf-grid">
+                        <div class="cf-card cf-income">
+                            <div class="cf-icon"><i class="ph ph-arrow-circle-up"></i></div>
+                            <div>
+                                <div class="cf-lbl">Total Pendapatan (Terfilter)</div>
+                                <div class="cf-amt" id="cf-total-income">Rp 0</div>
+                            </div>
+                        </div>
+                        <div class="cf-card cf-expense">
+                            <div class="cf-icon"><i class="ph ph-arrow-circle-down"></i></div>
+                            <div>
+                                <div class="cf-lbl">Total Pengeluaran (Terfilter)</div>
+                                <div class="cf-amt" id="cf-total-expense">Rp 0</div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Riwayat Transaksi</span>
+                        </div>
+                        <div style="overflow-x:auto;">
+                            <table class="dt">
+                                <thead><tr>
+                                    <th>Tanggal</th><th>Kategori</th>
+                                    <th>Keterangan / Klien</th>
+                                    <th style="text-align:right;">Nominal (Rp)</th>
+                                </tr></thead>
+                                <tbody id="cf-transactions-tbody"></tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+    </div>
+
+    <!-- MODAL: CASHFLOW -->
+    <div id="modal-cashflow" class="modal-ov">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>Tambah Transaksi Baru</h3>
+                <button class="modal-close" onclick="closeModal('modal-cashflow')"><i class="ph ph-x"></i></button>
+            </div>
+            <form id="form-cashflow" onsubmit="handleCashflowSubmit(event)">
+                <div class="fg">
+                    <label>Tanggal</label>
+                    <input type="date" id="form-cf-date" required class="fc">
+                </div>
+                <div class="fg">
+                    <label>Kategori</label>
+                    <select id="form-cf-category" required class="fc">
+                        <option value="Web & Landing Page">Web &amp; Landing Page</option>
+                        <option value="Social Media Management">Social Media Management</option>
+                        <option value="Graphic Design">Graphic Design</option>
+                        <option value="Video Production">Video Production</option>
+                        <option value="Operational">Operational Expense</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Keterangan / Nama Klien</label>
+                    <input type="text" id="form-cf-client" placeholder="Misal: Desain Web - Maulana" required class="fc">
+                </div>
+                <div class="fg">
+                    <label>Nominal (Rp)</label>
+                    <input type="number" id="form-cf-amount" placeholder="Contoh: 250000" required class="fc">
+                </div>
+                <div class="frow">
+                    <div class="fg">
+                        <label>Tipe</label>
+                        <select id="form-cf-type" required class="fc">
+                            <option value="income">Pemasukan</option>
+                            <option value="expense">Pengeluaran</option>
+                        </select>
+                    </div>
+                    <div class="fg">
+                        <label>Status</label>
+                        <select id="form-cf-status" required class="fc">
+                            <option value="Deal / Paid">Deal / Paid</option>
+                            <option value="In Progress">In Progress</option>
+                            <option value="Pending">Pending</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="mfooter">
+                    <button type="button" onclick="closeModal('modal-cashflow')" class="btn-s">Batal</button>
+                    <button type="submit" class="btn-p">Simpan Transaksi</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: ANALYTICS -->
+    <div id="modal-analytics" class="modal-ov">
+        <div class="modal-box">
+            <div class="modal-head">
+                <h3>Tambah Data Analitika</h3>
+                <button class="modal-close" onclick="closeModal('modal-analytics')"><i class="ph ph-x"></i></button>
+            </div>
+            <form id="form-analytics" onsubmit="handleAnalyticsSubmit(event)">
+                <div class="fg">
+                    <label>Platform</label>
+                    <select id="form-an-platform" onchange="toggleFormLikesGroup(this.value)" required class="fc">
+                        <option value="ig">Instagram</option>
+                        <option value="tiktok">TikTok</option>
+                        <option value="website">Website</option>
+                    </select>
+                </div>
+                <div class="fg">
+                    <label>Tanggal</label>
+                    <input type="date" id="form-an-date" required class="fc">
+                </div>
+                <div class="fg">
+                    <label id="label-an-views">Views / Pageviews</label>
+                    <input type="number" id="form-an-views" required class="fc">
+                </div>
+                <div class="fg">
+                    <label id="label-an-fol">Followers / Subscribers</label>
+                    <input type="number" id="form-an-followers" required class="fc">
+                </div>
+                <div id="form-group-likes" class="fg">
+                    <label>Likes</label>
+                    <input type="number" id="form-an-likes" value="0" class="fc">
+                </div>
+                <div class="mfooter">
+                    <button type="button" onclick="closeModal('modal-analytics')" class="btn-s">Batal</button>
+                    <button type="submit" class="btn-p">Simpan Data</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let appData = null;
+        let activePlatform = 'ig';
+        let socialChartInstance = null;
+
+        async function loadData() {
+            try {
+                const cached = localStorage.getItem('narava_admin_data_cache');
+                if (cached) { appData = JSON.parse(cached); return; }
+                const res = await fetch('data.json');
+                if (!res.ok) throw new Error();
+                appData = await res.json();
+                saveToJSON();
+            } catch {
+                appData = {
+                    cashflow: {
+                        summary: { new_inquiries:0, active_portfolio:0, total_income:0, total_expense:0 },
+                        transactions: []
+                    },
+                    analytics: {
+                        ig:      { labels:[], views:[], followers:[], likes:[] },
+                        tiktok:  { labels:[], views:[], followers:[], likes:[] },
+                        website: { labels:[], views:[], followers:[] }
+                    }
+                };
+            }
+        }
+
+        function saveToJSON() { localStorage.setItem('narava_admin_data_cache', JSON.stringify(appData)); }
+
+        function parseIdDate(s) {
+            if (!s) return new Date(0);
+            const m = { jan:0,januari:0,feb:1,februari:1,mar:2,maret:2,apr:3,april:3,mei:4,jun:5,juni:5,jul:6,juli:6,ags:7,agustus:7,sep:8,september:8,okt:9,oktober:9,nov:10,november:10,des:11,desember:11 };
+            const p = s.trim().toLowerCase().split(/\s+/);
+            return new Date(p[2]?parseInt(p[2]):2026, m[p[1]]!==undefined?m[p[1]]:5, parseInt(p[0])||1);
+        }
+
+        function fmtFull(ds) {
+            const d = new Date(ds);
+            const mn = ["Jan","Feb","Mar","Apr","Mei","Jun","Jul","Ags","Sep","Okt","Nov","Des"];
+            return `${d.getDate()} ${mn[d.getMonth()]} ${d.getFullYear()}`;
+        }
+
+        function fmtShort(ds) {
+            const d = new Date(ds);
+            const mn = ["Januari","Februari","Maret","April","Mei","Juni","Juli","Agustus","September","Oktober","November","Desember"];
+            return `${d.getDate()} ${mn[d.getMonth()]}`;
+        }
+
+        function recalc() {
+            let inc=0, exp=0, port=0;
+            appData.cashflow.transactions.forEach(t => {
+                if (t.type==='income') inc += t.amount;
+                else if (t.type==='expense') exp += t.amount;
+                if (t.status==='Deal / Paid'||t.status==='In Progress') port++;
+            });
+            const s = appData.cashflow.summary;
+            s.new_inquiries = appData.cashflow.transactions.length;
+            s.active_portfolio = port; s.total_income = inc; s.total_expense = exp;
+        }
+
+        function statusBadge(st) {
+            if (st==='Deal / Paid')  return `<span class="badge b-green"><i class="ph-fill ph-check-circle"></i>${st}</span>`;
+            if (st==='In Progress') return `<span class="badge b-orange">${st}</span>`;
+            return `<span class="badge b-gray">${st}</span>`;
+        }
+
+        function renderDashboard() {
+            document.getElementById('current-date').textContent = new Date().toLocaleDateString('id-ID',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+            recalc();
+            const s = appData.cashflow.summary;
+            document.getElementById('db-new-inquiries').textContent  = s.new_inquiries;
+            document.getElementById('db-active-portfolio').textContent = s.active_portfolio;
+            document.getElementById('db-total-income').textContent   = `Rp ${(s.total_income/1000).toLocaleString('id-ID')}K`;
+            document.getElementById('db-total-expense').textContent  = `Rp ${(s.total_expense/1000).toLocaleString('id-ID')}K`;
+            renderTables();
+        }
+
+        function renderTables() {
+            const tbD = document.getElementById('db-transactions-tbody');
+            const tbC = document.getElementById('cf-transactions-tbody');
+            let rD='', rC='';
+            const sv = document.getElementById('cf-start-date').value;
+            const ev = document.getElementById('cf-end-date').value;
+            let finc=0, fexp=0;
+
+            if (!appData.cashflow.transactions.length) {
+                rD = `<tr><td colspan="4" style="padding:24px;text-align:center;color:#94a3b8;font-size:13px;">Belum ada data inquiries</td></tr>`;
+                rC = `<tr><td colspan="4" style="padding:24px;text-align:center;color:#94a3b8;font-size:13px;">Belum ada riwayat transaksi</td></tr>`;
+            } else {
+                appData.cashflow.transactions.forEach(tx => {
+                    const nm = tx.client.includes(' - ') ? tx.client.split(' - ')[1] : tx.client;
+                    rD += `<tr>
+                        <td class="bold">${nm}</td>
+                        <td><span class="badge b-blue">${tx.category}</span></td>
+                        <td class="bold">Rp ${tx.amount.toLocaleString('id-ID')}</td>
+                        <td>${statusBadge(tx.status)}</td>
+                    </tr>`;
+
+                    let keep=true;
+                    const td = parseIdDate(tx.date);
+                    if (sv) { const sd=new Date(sv); sd.setHours(0,0,0,0); if(td<sd) keep=false; }
+                    if (ev) { const ed=new Date(ev); ed.setHours(23,59,59,999); if(td>ed) keep=false; }
+                    if (keep) {
+                        if (tx.type==='income') finc+=tx.amount; else fexp+=tx.amount;
+                        const col = tx.type==='income'?'#16a34a':'#dc2626';
+                        const sgn = tx.type==='income'?'+':'−';
+                        rC += `<tr>
+                            <td>${tx.date}</td>
+                            <td><span class="badge b-blue">${tx.category}</span></td>
+                            <td class="bold">${tx.client}</td>
+                            <td style="text-align:right;font-weight:700;color:${col};">${sgn} ${tx.amount.toLocaleString('id-ID')}</td>
+                        </tr>`;
+                    }
+                });
+                if (!rC) rC = `<tr><td colspan="4" style="padding:24px;text-align:center;color:#94a3b8;font-size:13px;">Tidak ada data pada rentang ini</td></tr>`;
+            }
+
+            document.getElementById('cf-total-income').textContent  = `Rp ${finc.toLocaleString('id-ID')}`;
+            document.getElementById('cf-total-expense').textContent = `Rp ${fexp.toLocaleString('id-ID')}`;
+            if (tbD) tbD.innerHTML = rD;
+            if (tbC) tbC.innerHTML = rC;
+        }
+
+        function applyCashflowFilter() { renderTables(); }
+        function resetCashflowFilter() {
+            document.getElementById('cf-start-date').value='';
+            document.getElementById('cf-end-date').value='';
+            renderTables();
+        }
+
+        function liveTrend(arr) {
+            const c = arr.filter(v=>v!==null&&v!==undefined);
+            if (c.length<2) return '0%';
+            const cur=c[c.length-1], prev=c[c.length-2];
+            if (prev===0) return cur>0?`↑ ${cur}`:'0%';
+            const p=((cur-prev)/prev)*100;
+            return p>0?`↑ ${p.toFixed(0)}%`:p<0?`↓ ${Math.abs(p).toFixed(0)}%`:'0%';
+        }
+
+        function styleTrend(el, t) {
+            el.className='trend';
+            el.classList.add(t.includes('↑')?'t-up':t.includes('↓')?'t-down':'t-flat');
+        }
+
+        function updateChartData(platform) {
+            activePlatform = platform;
+            const ctx = document.getElementById('socialChart').getContext('2d');
+            const btnIg=document.getElementById('btn-ig');
+            const btnTk=document.getElementById('btn-tiktok');
+            const btnWb=document.getElementById('btn-website');
+            [btnIg,btnTk,btnWb].forEach(b=>b.className='ptab');
+
+            const cd = appData.analytics[platform];
+
+            if (platform==='ig') {
+                btnIg.classList.add('a-ig');
+                document.getElementById('card-likes').style.display='';
+                document.getElementById('title-views').textContent='Total Views';
+                document.getElementById('title-followers').textContent='Total Followers';
+            } else if (platform==='tiktok') {
+                btnTk.classList.add('a-tiktok');
+                document.getElementById('card-likes').style.display='';
+                document.getElementById('title-views').textContent='Total Views';
+                document.getElementById('title-followers').textContent='Total Followers';
+            } else {
+                btnWb.classList.add('a-website');
+                document.getElementById('card-likes').style.display='none';
+                document.getElementById('title-views').textContent='Total Pageviews';
+                document.getElementById('title-followers').textContent='Total Subscribers';
+            }
+
+            const sv=document.getElementById('an-start-date').value;
+            const ev=document.getElementById('an-end-date').value;
+            let fl=[],fv=[],ff=[],fk=[];
+
+            for (let i=0;i<cd.labels.length;i++) {
+                const ld=parseIdDate(cd.labels[i]);
+                let keep=true;
+                if(sv){const sd=new Date(sv);sd.setHours(0,0,0,0);if(ld<sd)keep=false;}
+                if(ev){const ed=new Date(ev);ed.setHours(23,59,59,999);if(ld>ed)keep=false;}
+                if(keep){fl.push(cd.labels[i]);fv.push(cd.views[i]);ff.push(cd.followers[i]);if(cd.likes)fk.push(cd.likes[i]);}
+            }
+
+            if(fl.length>0){
+                const li=fl.length-1;
+                const v=fv[li]||0,f=ff[li]||0;
+                document.getElementById('stat-views').textContent = v>=1000?(v/1000).toFixed(2)+'K':v;
+                document.getElementById('stat-followers').textContent = f;
+                if(platform!=='website'&&fk.length>0) document.getElementById('stat-likes').textContent=fk[li]||0;
+            } else {
+                document.getElementById('stat-views').textContent='0';
+                document.getElementById('stat-followers').textContent='0';
+                if(platform!=='website') document.getElementById('stat-likes').textContent='0';
+            }
+
+            const tvE=document.getElementById('trend-views');
+            const tfE=document.getElementById('trend-followers');
+            const tlE=document.getElementById('trend-likes');
+            const vt=liveTrend(fv), ft=liveTrend(ff), kt=platform!=='website'?liveTrend(fk):'0%';
+            tvE.textContent=vt; tfE.textContent=ft; if(tlE) tlE.textContent=kt;
+            styleTrend(tvE,vt); styleTrend(tfE,ft); if(tlE) styleTrend(tlE,kt);
+
+            const datasets=[
+                { label:platform==='website'?'Pageviews':'Views', data:fv,
+                  borderColor:'#3b82f6', backgroundColor:'rgba(59,130,246,.06)',
+                  borderWidth:2, tension:.4, fill:true, pointRadius:3, pointHoverRadius:6, spanGaps:true },
+                { label:platform==='website'?'Subscribers':'Followers', data:ff,
+                  borderColor:'#8b5cf6', backgroundColor:'rgba(139,92,246,.06)',
+                  borderWidth:2, tension:.4, fill:true, pointRadius:3, pointHoverRadius:6, spanGaps:true },
+            ];
+            if(platform!=='website') datasets.push({
+                label:'Likes', data:fk,
+                borderColor:'#f43f5e', backgroundColor:'rgba(244,63,94,.06)',
+                borderWidth:2, tension:.4, fill:true, pointRadius:3, pointHoverRadius:6, spanGaps:true
+            });
+
+            if(socialChartInstance) socialChartInstance.destroy();
+            socialChartInstance = new Chart(ctx,{
+                type:'line',
+                data:{labels:fl, datasets},
+                options:{
+                    responsive:true, maintainAspectRatio:false,
+                    interaction:{mode:'index',intersect:false},
+                    scales:{
+                        y:{min:0, grid:{color:'rgba(0,0,0,.04)'}, ticks:{font:{family:"'Inter',sans-serif",size:11},color:'#94a3b8'}},
+                        x:{grid:{display:false}, ticks:{font:{family:"'Inter',sans-serif",size:11},color:'#94a3b8'}}
+                    },
+                    plugins:{legend:{position:'top',labels:{font:{family:"'Inter',sans-serif",size:12},boxWidth:12,borderRadius:6}}}
+                }
+            });
+        }
+
+        function applyAnalyticsFilter() { updateChartData(activePlatform); }
+        function resetAnalyticsFilter() {
+            document.getElementById('an-start-date').value='';
+            document.getElementById('an-end-date').value='';
+            updateChartData(activePlatform);
+        }
+
+        function openModal(id) { document.getElementById(id).classList.add('open'); }
+        function closeModal(id) { document.getElementById(id).classList.remove('open'); }
+
+        function toggleFormLikesGroup(p) {
+            const g=document.getElementById('form-group-likes');
+            const li=document.getElementById('form-an-likes');
+            if(p==='website'){g.style.display='none';li.removeAttribute('required');}
+            else{g.style.display='';li.setAttribute('required','required');}
+        }
+
+        function handleCashflowSubmit(e) {
+            e.preventDefault();
+            const tx = {
+                id: Date.now(),
+                date: fmtFull(document.getElementById('form-cf-date').value),
+                category: document.getElementById('form-cf-category').value,
+                client: document.getElementById('form-cf-client').value,
+                amount: parseInt(document.getElementById('form-cf-amount').value),
+                type: document.getElementById('form-cf-type').value,
+                status: document.getElementById('form-cf-status').value
+            };
+            appData.cashflow.transactions.unshift(tx);
+            saveToJSON();
+            renderDashboard();
+            closeModal('modal-cashflow');
+            document.getElementById('form-cashflow').reset();
+        }
+
+        function handleAnalyticsSubmit(e) {
+            e.preventDefault();
+            const pl=document.getElementById('form-an-platform').value;
+            const dv=document.getElementById('form-an-date').value;
+            const views=parseInt(document.getElementById('form-an-views').value);
+            const fol=parseInt(document.getElementById('form-an-followers').value);
+            const likes=pl!=='website'?parseInt(document.getElementById('form-an-likes').value):null;
+            const cd=appData.analytics[pl];
+            let items=[];
+            for(let i=0;i<cd.labels.length;i++){
+                items.push({label:cd.labels[i],view:cd.views[i],follower:cd.followers[i],like:cd.likes?cd.likes[i]:null,ad:parseIdDate(cd.labels[i])});
+            }
+            items.push({label:fmtShort(dv),view:views,follower:fol,like:likes,ad:new Date(dv)});
+            items.sort((a,b)=>a.ad-b.ad);
+            cd.labels=items.map(i=>i.label);
+            cd.views=items.map(i=>i.view);
+            cd.followers=items.map(i=>i.follower);
+            if(cd.likes) cd.likes=items.map(i=>i.like);
+            saveToJSON();
+            updateChartData(pl);
+            closeModal('modal-analytics');
+            document.getElementById('form-analytics').reset();
+        }
+
+        function switchTab(tabId, btn) {
+            document.querySelectorAll('#page-content section').forEach(s=>s.classList.add('section-hidden'));
+            document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));
+            document.getElementById(tabId).classList.remove('section-hidden');
+            btn.classList.add('active');
+            if(tabId==='analytics') updateChartData(activePlatform);
+            if(tabId==='dashboard') renderDashboard();
+        }
+
+        window.onload = async function() {
+            await loadData();
+            renderDashboard();
+            updateChartData('ig');
+        };
+    </script>
+</body>
+</html>

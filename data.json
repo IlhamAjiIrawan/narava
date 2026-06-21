@@ -1,0 +1,43 @@
+{
+  "cashflow": {
+    "summary": {
+      "new_inquiries": 1,
+      "active_portfolio": 1,
+      "total_income": 200000,
+      "total_expense": 0
+    },
+    "transactions": [
+      {
+        "id": 1,
+        "date": "15 Jun 2026",
+        "category": "Web & Landing Page",
+        "client": "Desain Web - Maulana",
+        "amount": 200000,
+        "type": "income",
+        "status": "Deal / Paid"
+      }
+    ]
+  },
+  "analytics": {
+    "ig": {
+      "labels": ["1 Juni", "8 Juni", "14 Juni"],
+      "views": [384, 438, 1112],
+      "followers": [15, 18, 22],
+      "likes": [18, 39, 61],
+      "stats": { "views": "1.11K", "viewsT": "↑ 190%", "fol": "22", "folT": "↑ 47%", "likes": "61", "likesT": "↑ 239%" }
+    },
+    "tiktok": {
+      "labels": ["1 Juni", "8 Juni", "14 Juni"],
+      "views": [0, null, 796],
+      "followers": [1, null, 9],
+      "likes": [0, null, 42],
+      "stats": { "views": "796", "viewsT": "+ 796", "fol": "9", "folT": "↑ 800%", "likes": "42", "likesT": "+ 42" }
+    },
+    "website": {
+      "labels": ["1 Juni", "8 Juni", "14 Juni"],
+      "views": [0, null, 21],
+      "followers": [0, 0, 0],
+      "stats": { "views": "21", "viewsT": "+ 21", "fol": "0", "folT": "0%" }
+    }
+  }
+}
