@@ -23,21 +23,18 @@
       "labels": ["1 Juni", "8 Juni", "14 Juni"],
       "views": [384, 438, 1112],
       "followers": [15, 18, 22],
-      "likes": [18, 39, 61],
-      "stats": { "views": "1.11K", "viewsT": "↑ 190%", "fol": "22", "folT": "↑ 47%", "likes": "61", "likesT": "↑ 239%" }
+      "likes": [18, 39, 61]
     },
     "tiktok": {
       "labels": ["1 Juni", "8 Juni", "14 Juni"],
-      "views": [0, null, 796],
-      "followers": [1, null, 9],
-      "likes": [0, null, 42],
-      "stats": { "views": "796", "viewsT": "+ 796", "fol": "9", "folT": "↑ 800%", "likes": "42", "likesT": "+ 42" }
+      "views": [0, 380, 796], 
+      "followers": [10, 18, 35],
+      "likes": [5, 42, 98]
     },
     "website": {
       "labels": ["1 Juni", "8 Juni", "14 Juni"],
-      "views": [0, null, 21],
-      "followers": [0, 0, 0],
-      "stats": { "views": "21", "viewsT": "+ 21", "fol": "0", "folT": "0%" }
+      "views": [120, 240, 510],
+      "followers": [5, 12, 28]
     }
   }
 }
