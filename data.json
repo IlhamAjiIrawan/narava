@@ -20,21 +20,21 @@
   },
   "analytics": {
     "ig": {
-      "labels": ["1 Juni", "8 Juni", "14 Juni"],
-      "views": [384, 438, 1112],
-      "followers": [15, 18, 22],
-      "likes": [18, 39, 61]
+      "labels": ["1 Juni", "8 Juni", "14 Juni", "22 Juni"],
+      "views": [384, 438, 1112, 1441],
+      "followers": [15, 18, 22, 29],
+      "likes": [18, 39, 61, 172]
     },
     "tiktok": {
-      "labels": ["1 Juni", "8 Juni", "14 Juni"],
-      "views": [0, 380, 796], 
-      "followers": [10, 18, 35],
-      "likes": [5, 42, 98]
+      "labels": ["1 Juni", "8 Juni", "14 Juni", "22 Juni"],
+      "views": [0, 380, 796, 832],
+      "followers": [3, 8, 15, 18],
+      "likes": [5, 42, 98, 150]
     },
     "website": {
-      "labels": ["1 Juni", "8 Juni", "14 Juni"],
-      "views": [120, 240, 510],
-      "followers": [5, 12, 28]
+      "labels": ["1 Juni", "8 Juni", "14 Juni", "22 Juni"],
+      "views": [2, 24, 30, 40],
+      "followers": [0, 0, 0, 0]
     }
   }
 }
