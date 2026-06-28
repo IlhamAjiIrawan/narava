@@ -745,22 +745,58 @@
         position: relative;
         overflow: hidden;
       }
+      .portfolio-thumb img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        object-position: center top;
+        display: block;
+        position: absolute;
+        inset: 0;
+      }
+      .portfolio-thumb .portfolio-emoji {
+        position: relative;
+        z-index: 1;
+      }
       .portfolio-overlay {
         position: absolute;
         inset: 0;
         background: linear-gradient(
           180deg,
-          transparent 40%,
-          rgba(20, 26, 28, 0.9) 100%
+          transparent 20%,
+          rgba(13, 27, 42, 0.92) 100%
         );
         display: flex;
-        align-items: flex-end;
+        flex-direction: column;
+        align-items: flex-start;
+        justify-content: flex-end;
         padding: 24px;
         opacity: 0;
         transition: var(--transition);
+        gap: 12px;
       }
       .portfolio-item:hover .portfolio-overlay {
         opacity: 1;
+      }
+      .portfolio-link-btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 6px;
+        background: var(--orange);
+        color: white;
+        text-decoration: none;
+        font-size: 12px;
+        font-weight: 700;
+        padding: 8px 16px;
+        border-radius: 50px;
+        transition: var(--transition);
+        white-space: nowrap;
+        box-shadow: 0 4px 12px rgba(243,112,33,0.35);
+      }
+      .portfolio-link-btn:hover {
+        background: var(--orange-dark);
+        transform: translateY(-1px);
+        box-shadow: 0 6px 16px rgba(243,112,33,0.45);
       }
       .portfolio-cat {
         display: inline-block;
@@ -770,7 +806,7 @@
         font-weight: 700;
         letter-spacing: 0.08em;
         text-transform: uppercase;
-        margin-bottom: 8px;
+        margin-bottom: 4px;
         color: white;
       }
       .cat-brand {
@@ -2231,9 +2267,7 @@
         <button class="filter-btn active" data-filter="all">All Work</button>
         <button class="filter-btn" data-filter="branding">Branding</button>
         <button class="filter-btn" data-filter="social">Social Media</button>
-        <button class="filter-btn" data-filter="production">
-          Digital Production
-        </button>
+        <button class="filter-btn" data-filter="production">Digital Production</button>
         <button class="filter-btn" data-filter="uiux">UI/UX</button>
         <button class="filter-btn" data-filter="webdev">Web Dev</button>
         <button class="filter-btn" data-filter="marketing">Marketing</button>
@@ -2243,125 +2277,108 @@
         <div class="portfolio-item" data-category="branding">
           <div
             class="portfolio-thumb"
-            style="
-              background: linear-gradient(135deg, #00828a 0%, #005f65 100%);
-            "
+            style="background: linear-gradient(135deg, #00828a 0%, #005f65 100%);"
           >
-            <svg width="80" height="80" viewBox="0 0 80 80" fill="none">
-              <rect
-                x="10"
-                y="10"
-                width="60"
-                height="60"
-                rx="16"
-                fill="white"
-                opacity="0.1"
-              />
-              <path
-                d="M20 60V20L40 48L60 20V60"
-                stroke="white"
-                stroke-width="6"
-                stroke-linecap="round"
-                stroke-linejoin="round"
-              />
-            </svg>
+            <img src="parmat.png" alt="Parmat — Logo Identity" />
           </div>
           <div class="portfolio-overlay">
             <div class="portfolio-info">
               <span class="portfolio-cat cat-brand">Branding</span>
-              <div class="portfolio-name">
-                Artisan Foods — Complete Brand Identity
-              </div>
+              <div class="portfolio-name">Parmat — Logo Identity</div>
             </div>
+            <a href="https://drive.google.com/file/d/1nbHzahGjL5ybs1kMYuaZ_y6yPO7GlTBa/view?usp=drive_link" target="_blank" class="portfolio-link-btn">
+              Lihat Proyek →
+            </a>
           </div>
         </div>
 
         <div class="portfolio-item" data-category="social">
           <div
             class="portfolio-thumb"
-            style="
-              background: linear-gradient(135deg, #f37021 0%, #d45c0f 100%);
-            "
+            style="background: linear-gradient(135deg, #f37021 0%, #d45c0f 100%);"
           >
-            <span style="font-size: 52px">📱</span>
+            <img src="NaravaIG.png" alt="Narava — Social Media Creative" />
           </div>
           <div class="portfolio-overlay">
             <div class="portfolio-info">
               <span class="portfolio-cat cat-social">Social Media</span>
-              <div class="portfolio-name">FitLife — Content System</div>
+              <div class="portfolio-name">Narava — Social Media Creative</div>
             </div>
+            <a href="https://www.instagram.com/narava.cr?utm_source=ig_web_button_share_sheet&igsh=ZDNlZDc0MzIxNw==" target="_blank" class="portfolio-link-btn">
+              Lihat Proyek →
+            </a>
           </div>
         </div>
 
         <div class="portfolio-item" data-category="uiux">
           <div
             class="portfolio-thumb"
-            style="
-              background: linear-gradient(135deg, #6c5ce7 0%, #4a3db5 100%);
-            "
+            style="background: linear-gradient(135deg, #6c5ce7 0%, #4a3ab5 100%);"
           >
-            <span style="font-size: 52px">🖥️</span>
+            <img src="segarbuah.png" alt="SegarBuah UI/UX Design" />
           </div>
           <div class="portfolio-overlay">
             <div class="portfolio-info">
               <span class="portfolio-cat cat-ui">UI/UX</span>
-              <div class="portfolio-name">
-                Fintech Dashboard — Product Design
-              </div>
+              <div class="portfolio-name">SegarBuah — E-Commerce Web Design</div>
             </div>
+            <a href="https://www.figma.com/make/uEArQnWut6Wz65U4nv9SWN/SegarBuah?fullscreen=1&t=UcQCTa4DYqHyNz6n-1&code-node-id=0-9" target="_blank" class="portfolio-link-btn">
+              Lihat Prototipe →
+            </a>
           </div>
         </div>
 
         <div class="portfolio-item" data-category="production">
           <div
             class="portfolio-thumb"
-            style="
-              background: linear-gradient(135deg, #e91e63 0%, #b5144d 100%);
-            "
+            style="background: linear-gradient(135deg, #e91e63 0%, #b5144d 100%);"
           >
-            <span style="font-size: 52px">🎬</span>
+            <img src="kopisemesta.png" alt="Kopi Semesta — Digital Production" />
           </div>
           <div class="portfolio-overlay">
             <div class="portfolio-info">
               <span class="portfolio-cat cat-video">Digital Production</span>
-              <div class="portfolio-name">Luxe Hotel — Brand Film</div>
+              <div class="portfolio-name">Kopi Semesta — Digital Production</div>
             </div>
+            <a href="https://drive.google.com/file/d/1b293a0H297oxlU1AT01qAYzj_XanCpjK/view?usp=drivesdk" target="_blank" class="portfolio-link-btn">
+              Lihat Proyek →
+            </a>
           </div>
         </div>
 
         <div class="portfolio-item" data-category="webdev">
           <div
             class="portfolio-thumb"
-            style="
-              background: linear-gradient(135deg, #00897b 0%, #005f55 100%);
-            "
+            style="background: linear-gradient(135deg, #00897b 0%, #005f55 100%);"
           >
-            <span style="font-size: 52px">⚙️</span>
+            <img src="rmclean.png" alt="RM Clean — Company Profile" />
           </div>
           <div class="portfolio-overlay">
             <div class="portfolio-info">
               <span class="portfolio-cat cat-dev">Web Dev</span>
-              <div class="portfolio-name">Greentech Corp — Company Profile</div>
+              <div class="portfolio-name">RM Clean — Company Profile</div>
             </div>
+            <a href="https://rmcleanshoesandapparel.vercel.app/" target="_blank" class="portfolio-link-btn">
+              Lihat Proyek →
+            </a>
           </div>
         </div>
 
         <div class="portfolio-item" data-category="marketing">
           <div
             class="portfolio-thumb"
-            style="
-              background: linear-gradient(135deg, #ff6f00 0%, #c55500 100%);
-            "
+            style="background: linear-gradient(135deg, #ff6f00 0%, #c55500 100%);"
           >
-            <span style="font-size: 52px">📣</span>
+            <span class="portfolio-emoji" style="font-size: 52px">📣</span>
           </div>
           <div class="portfolio-overlay">
             <div class="portfolio-info">
               <span class="portfolio-cat cat-mktg">Marketing</span>
-              <div class="portfolio-name">
-                Startup Launch — Campaign Strategy
-              </div>
+              <div class="portfolio-name">Startup Launch — Campaign Strategy</div>
             </div>
+            <a href="https://www.behance.net" target="_blank" class="portfolio-link-btn">
+              Lihat Proyek →
+            </a>
           </div>
         </div>
       </div>
